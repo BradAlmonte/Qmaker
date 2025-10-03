@@ -2,8 +2,6 @@
 
 Qmaker is a lightweight, client‑side **QR code generator** built with HTML, CSS, and vanilla JavaScript. It’s styled with a modern black‑and‑red “tech” aesthetic and designed as a portfolio project to demonstrate both functionality and user experience design.
 
-![Qmaker Preview](media/preview1.png)
-
 ---
 
 ## 🚀 Live Demo
