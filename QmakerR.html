@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Qmaker — Portfolio Version</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..800&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg: #0a0a0a;
+      --muted: #9ca3af;
+      --text: #e5e7eb;
+      --accent: #ef4444;
+      --accent-2: #ff1a3d;
+      --ring: rgba(239, 68, 68, 0.45);
+    }
+    *{ box-sizing: border-box }
+    html,body{ height:100% }
+    body{
+      margin:0; color:var(--text);
+      font: 16px/1.5 Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(1100px 600px at 20% -10%, rgba(239,68,68,.12), transparent 60%),
+        radial-gradient(800px 500px at 100% 10%, rgba(239,68,68,.08), transparent 55%),
+        linear-gradient(180deg, #0b0b0b, #050505);
+    }
+    .grid{position: fixed; inset: 0; pointer-events:none; background: repeating-linear-gradient(0deg, rgba(255,255,255,.03) 0 1px, transparent 1px 32px), repeating-linear-gradient(90deg, rgba(255,255,255,.03) 0 1px, transparent 1px 32px); mask: radial-gradient(70% 70% at 50% 30%, #000 60%, transparent 95%);}
+    .wrap{ max-width: 1000px; margin: 48px auto; padding: 0 20px; }
+    header{display:flex; flex-direction:column; align-items:center; text-align:center; gap:8px; margin-bottom:32px;}
+    .brand{font-family: Orbitron, Inter, sans-serif; font-weight:800; font-size: clamp(26px, 6vw, 36px); letter-spacing:.06em;}
+    .subtitle{color: var(--muted); font-size:14px;}
+
+    /* Intro section */
+    .intro{margin-bottom:40px; line-height:1.6;}
+    .intro h2{font-family: Orbitron, sans-serif; font-size:22px; margin:0 0 8px; color:var(--accent-2);}
+    .intro p{margin:0 0 12px;}
+    .features{list-style: none; padding:0; margin:0; display:grid; gap:6px;}
+    .features li::before{content:"✔ "; color:var(--accent-2)}
+
+    /* Panel */
+    .panel{background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.08); border-radius:16px; padding:20px; box-shadow:0 0 20px rgba(239,68,68,.15);}
+    .content{display:grid; grid-template-columns: 1fr 1fr; gap:20px;}
+    @media(max-width:850px){.content{grid-template-columns:1fr}}
+
+    .controls{display:grid; gap:12px;}
+    label{ font-size: 13px; color: var(--muted) }
+    input[type="text"], select, input[type="range"]{width:100%; padding:10px; border-radius:10px; border:1px solid rgba(255,255,255,.08); background:#0b0b0f; color:var(--text);}
+    input[type="text"]:focus{ border-color: var(--ring); box-shadow: 0 0 0 4px rgba(239,68,68,.15) }
+    .row{ display:grid; grid-template-columns: 1fr 1fr; gap:12px }
+
+    .buttons{display:flex; flex-wrap:wrap; gap:10px;}
+    button{appearance:none; border:1px solid rgba(239,68,68,.55); background: linear-gradient(180deg, rgba(239,68,68,.18), rgba(239,68,68,.08)); color:#fff; padding:10px 14px; border-radius:10px; font-weight:600; cursor:pointer; transition: all .2s ease;}
+    button:hover{box-shadow:0 0 12px rgba(239,68,68,.3)}
+
+    .stage{display:grid; gap:12px; place-items:center; background:#0b0b0f; border-radius:12px; padding:16px; border:1px dashed rgba(239,68,68,.35);}
+    #qr{min-height:260px; display:grid; place-items:center;}
+    .waterline{font-size:12px; color:var(--muted)}
+
+    .footer{text-align:center; font-size:12px; color:var(--muted); margin-top:30px;}
+  </style>
+</head>
+<body>
+  <div class="grid" aria-hidden="true"></div>
+  <div class="wrap">
+    <header>
+      <div class="brand">Qmaker</div>
+      <div class="subtitle">Generate, customize, and download QR codes in seconds</div>
+    </header>
+
+    <section class="intro">
+      <h2>About Qmaker</h2>
+      <p>Qmaker is a lightweight, client‑side QR code generator built with HTML, CSS, and vanilla JavaScript. It was designed with the goal of proviting a service many providers try to charge for, for free.</p>
+      <p>Key features:</p>
+      <ul class="features">
+        <li>Customizable QR code content (text, URLs, Wi‑Fi credentials, etc.)</li>
+        <li>Error correction level selection (L, M, Q, H)</li>
+        <li>Adjustable size slider for resolution control</li>
+        <li>One‑click PNG download</li>
+        <li>Responsive design with a themed UI</li>
+      </ul>
+    </section>
+
+    <section class="panel">
+      <div class="content">
+        <!-- Controls -->
+        <div class="controls">
+          <div>
+            <label for="text">Content</label>
+            <input id="text" type="text" placeholder="Type text or paste a URL" />
+          </div>
+
+          <div class="row">
+            <div>
+              <label for="level">Error correction</label>
+              <select id="level">
+                <option value="L">L (smallest)</option>
+                <option value="M" selected>M</option>
+                <option value="Q">Q</option>
+                <option value="H">H (most robust)</option>
+              </select>
+            </div>
+            <div>
+              <label for="size">Size <span id="sizeLabel"></span></label>
+              <input id="size" type="range" min="192" max="768" step="32" value="320" />
+            </div>
+          </div>
+
+          <div class="buttons">
+            <button id="make">Generate</button>
+            <button id="download">Download PNG</button>
+            <button id="clear">Clear</button>
+          </div>
+        </div>
+
+        <!-- QR preview -->
+        <div class="stage">
+          <div id="qr"><div class="waterline">Your QR preview appears here</div></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer">© 2025 Brad Almonte — Portfolio Project</div>
+  </div>
+
+  <script src="https://unpkg.com/qrcodejs/qrcode.min.js"></script>
+  <script>
+    const elText = document.getElementById('text');
+    const elLevel = document.getElementById('level');
+    const elSize = document.getElementById('size');
+    const elSizeLabel = document.getElementById('sizeLabel');
+    const container = document.getElementById('qr');
+    let qrobj = null;
+
+    function labelSize(){ elSizeLabel.textContent = `(${elSize.value}px)`; }
+    labelSize();
+    elSize.addEventListener('input', labelSize);
+
+    function render(){
+      container.innerHTML = "";
+      const text = elText.value.trim() || "Portfolio QR";
+      const size = parseInt(elSize.value,10);
+      qrobj = new QRCode(container, {
+        text,
+        width:size,
+        height:size,
+        correctLevel:QRCode.CorrectLevel[elLevel.value]
+      });
+    }
+
+    function download(){
+      const canvas = container.querySelector('canvas');
+      const img = container.querySelector('img');
+      const dataURL = canvas? canvas.toDataURL('image/png'): (img? img.src: null);
+      if(!dataURL) return;
+      const a = document.createElement('a');
+      a.href = dataURL;
+      a.download = `qmaker-${Date.now()}.png`;
+      a.click();
+    }
+
+    function clearQR(){ container.innerHTML = '<div class="waterline">Your QR preview appears here</div>'; qrobj=null; }
+
+    document.getElementById('make').addEventListener('click', render);
+    document.getElementById('download').addEventListener('click', download);
+    document.getElementById('clear').addEventListener('click', clearQR);
+    elText.addEventListener('keydown', (e)=>{ if(e.key==='Enter') render(); });
+  </script>
+</body>
+</html>
